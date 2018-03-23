@@ -8,7 +8,6 @@ from sklearn_crfsuite import metrics
 def read_conll_file(path):
     sentences = []
     sentence = []
-
     lines = []
     with codecs.open(path, 'r', 'utf-8') as file:
         for line in file:
@@ -26,8 +25,6 @@ def read_conll_file(path):
     return sentences
 
 def word2features(sent, i):
-    if (len(sent) < 3):
-        print("fail")
     word = sent[i][0]
     postag = sent[i][1]
     chunktag = sent[i][2]
@@ -84,10 +81,17 @@ def sent2features(sent):
     return [word2features(sent, i) for i in range(len(sent))]
 
 def sent2labels(sent):
-    return [label for token, postag, chunktag, label in sent]
+
+    try:
+        return [label for token, postag, chunktag, label, _ in sent]
+    except:
+        print(sent)
 
 def sent2tokens(sent):
-    return [token for token, postag,chunktag, label in sent]
+    try:
+        return [token for token, postag,chunktag, label, _ in sent]
+    except:
+        print(sent)
 
 def main():
     train_sents = read_conll_file("ner/ner_train.muc")
